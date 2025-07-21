@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         (kingRow === 10 && kingCol === 0) ||
                         (kingRow === 10 && kingCol === 10)
                     ) {
-                        announceWinner("Black (Defenders) win! The king has escaped.");
+                        announceWinner("Černý (Obránci) vyhrává! Král se dostal do rohu a unikl z obklíčení.");
                         return;
                     }
                 }
@@ -278,7 +278,7 @@ function checkCaptures(cell, movedType) {
                         setTimeout(() => {
                             if (enemyType === "king") {
                                 enemyCell.removeChild(piece);
-                                announceWinner("White (Attackers) win! The king has been captured.");
+                                announceWinner("Bílí (Útočníci) vyhrávají! Král byl zajat.");
                             } else {
                                 enemyCell.removeChild(piece);
                             }
