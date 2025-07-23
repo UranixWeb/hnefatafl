@@ -41,19 +41,42 @@ document.addEventListener("DOMContentLoaded", () => {
             { dr: 0, dc: -1 }  // left
         ];
         possibleMoves = [];
+
+        // Highlight the cell under the selected piece
+        cell.classList.add('move-possible');
+        possibleMoves.push(cell);
+
         for (const { dr, dc } of directions) {
             let r = row + dr, c = col + dc;
             while (r >= 0 && r < 11 && c >= 0 && c < 11) {
                 const nextCell = getCell(r, c);
                 if (!nextCell) break;
+
+                const isCorner = nextCell.classList.contains('corner');
+                const isCenter = (r === 5 && c === 5);
+
                 // Only the king can move onto a corner
-                if (nextCell.classList.contains('corner')) {
+                if (isCorner) {
                     if (pieceType === "king" && isEmpty(nextCell)) {
                         nextCell.classList.add('move-possible');
                         possibleMoves.push(nextCell);
                     }
                     break;
                 }
+
+                // Only the king can stop on the center, others can pass through
+                if (isCenter) {
+                    if (pieceType === "king" && isEmpty(nextCell)) {
+                        nextCell.classList.add('move-possible');
+                        possibleMoves.push(nextCell);
+                        break;
+                    }
+                    // If not king, skip marking as move-possible, but allow passing through
+                    r += dr;
+                    c += dc;
+                    continue;
+                }
+
                 if (isEmpty(nextCell)) {
                     nextCell.classList.add('move-possible');
                     possibleMoves.push(nextCell);
@@ -275,6 +298,7 @@ function checkCaptures(cell, movedType) {
                     if (piece) {
                         // Animate capture
                         piece.classList.add('captured');
+                        // Remove the piece after animation
                         setTimeout(() => {
                             if (enemyType === "king") {
                                 enemyCell.removeChild(piece);
@@ -282,7 +306,7 @@ function checkCaptures(cell, movedType) {
                             } else {
                                 enemyCell.removeChild(piece);
                             }
-                        }, 280);
+                        }, 800);
                     }
                 }
             }
